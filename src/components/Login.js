@@ -17,7 +17,7 @@ class Login extends Component {
         e.preventDefault()
         const { dispatch } = this.props
         console.log('handleLogout')
-        dispatch(dispatch(logoutAuthedUser()))
+        dispatch(logoutAuthedUser())
     }
 
     render() {

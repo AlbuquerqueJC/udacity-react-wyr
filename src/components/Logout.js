@@ -5,7 +5,7 @@ import {Redirect} from "react-router-dom";
 
 class Logout extends Component {
     componentDidMount() {
-        this.props.dispatch(logoutAuthedUser())
+        this.props.logoutAuthedUser()
     }
 
     render() {
@@ -20,4 +20,4 @@ function mapStateToProps ({authedUser}) {
     }
 }
 
-export default connect(mapStateToProps)(Logout)
+export default connect(mapStateToProps, {logoutAuthedUser})(Logout)

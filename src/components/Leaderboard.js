@@ -9,14 +9,14 @@ class Leaderboard extends Component {
             <div className='leaderboard'>
                 <table className="table table-striped">
                     <thead>
-                    <tr>
-                        <th scope="col">#</th>
-                        <th scope="col">Avatar</th>
-                        <th scope="col">Name</th>
-                        <th scope="col">Answered Q's</th>
-                        <th scope="col">Created Q's</th>
-                        <th scope="col">Score</th>
-                    </tr>
+                        <tr>
+                            <th scope="col">#</th>
+                            <th scope="col">Avatar</th>
+                            <th scope="col">Name</th>
+                            <th scope="col">Answered Q's</th>
+                            <th scope="col">Created Q's</th>
+                            <th scope="col">Score</th>
+                        </tr>
                     </thead>
                     <tbody>
                     {userTotalsRanked.map((userTotal) =>
@@ -42,7 +42,7 @@ function mapStateToProps ({users}) {
     userTotals = userIds.map((id) => {
         let asked = users[id].questions.length
         let answered = Object.keys(users[id].answers).reduce(
-            (prevValue, currentValue) => prevValue + 1,
+            (prevValue) => prevValue + 1,
             0
         );
         let score = asked + answered
