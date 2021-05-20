@@ -13,8 +13,8 @@ class LeaderboardView extends Component {
                          alt="User Avatar" />
                 </td>
                 <td>{users[userId].name}</td>
-                <td>{asked}</td>
                 <td>{answered}</td>
+                <td>{asked}</td>
                 <td>{score}</td>
             </tr>
         )

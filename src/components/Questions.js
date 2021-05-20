@@ -1,9 +1,9 @@
 import React, { Component } from "react";
 import {connect} from "react-redux";
-import { Link, withRouter } from 'react-router-dom'
+import {Link, withRouter} from 'react-router-dom'
 import {handleAddQuestionAnswer} from "../actions/questions";
 
-class Question extends Component {
+class Questions extends Component {
     state = {
         selectedOption: '',
         toResults: false
@@ -22,8 +22,6 @@ class Question extends Component {
 
         dispatch(handleAddQuestionAnswer(qid, selectedOption))
 
-        console.log('Question Answer: ', qid, selectedOption)
-
         this.setState(()=> ({
             selectedOption: '',
             toResults: qid ? false : true,
@@ -33,12 +31,13 @@ class Question extends Component {
     }
 
     render() {
-        const { question, qid, results, userIds, totalOne,
-            totalTwo, answered, toAnswer, users } = this.props
+        const { question, qid, results, totalOne, totalTwo,
+            answered, toAnswer, users, yourAnswer } = this.props
 
-        if (question === null) {
+        if (question === null || question === undefined) {
             return <p>This question doesn't exist!</p>
         }
+        console.log(question)
         const totalOnePct = totalOne + '%';
         const totalTwoPct = totalTwo + '%';
 
@@ -96,13 +95,15 @@ class Question extends Component {
                         </div>
                         <div className='panel-body'>
                             <ul className="list-group">
-                                <li className="list-group-item list-group-item-info">
+                                <li className={yourAnswer === "optionOne"
+                                    ? "list-group-item list-group-item-info"
+                                    : "list-group-item"}>
                                     <h4 className="card-subtitle">
                                         Would you rather {question.optionOne.text}?
                                     </h4>
-                                    <h5 className="card-text">
-                                        Votes: {question.optionOne.votes.length} / {userIds.length}<br />
-                                    </h5>
+                                    <h6 className="card-text">
+                                        Votes: {question.optionOne.votes.length}<br />
+                                    </h6>
                                     Total:
                                     <div className="progress">
                                         <div className="progress-bar" role="progressbar"
@@ -111,14 +112,19 @@ class Question extends Component {
                                              aria-valuemax="100">{totalOnePct}
                                         </div>
                                     </div>
+                                    {yourAnswer === "optionOne"
+                                        ? "This was your answer"
+                                        : ""}
                                 </li>
-                                <li className="list-group-item list-group-item-warning">
+                                <li className={yourAnswer === "optionTwo"
+                                    ? "list-group-item list-group-item-warning"
+                                    : "list-group-item"}>
                                     <h4 className="card-subtitle">
                                         Would you rather {question.optionTwo.text}?
                                     </h4>
-                                    <h5 className="card-text">
-                                        Votes: {question.optionTwo.votes.length} / {userIds.length}<br />
-                                    </h5>
+                                    <h6 className="card-text">
+                                        Votes: {question.optionTwo.votes.length}<br />
+                                    </h6>
                                     Total:
                                     <div className="progress">
                                         <div className="progress-bar" role="progressbar"
@@ -127,6 +133,9 @@ class Question extends Component {
                                              aria-valuemax="100">{totalTwoPct}
                                         </div>
                                     </div>
+                                    {yourAnswer === "optionTwo"
+                                        ? "This was your answer"
+                                        : ""}
                                 </li>
                             </ul>
                         </div>
@@ -134,7 +143,7 @@ class Question extends Component {
                 )}
                 {toAnswer === false && (
                     <div className="card">
-                        <Link to={`/question/${qid}`} className='question'>
+                        <Link to={`/questions/${qid}`} className='question'>
                             <div className="card-body" style={{textTransform: "capitalize"}}>
                                 <h6 className="card-title">
                                     <img src={users[question.author].avatarURL} className="img-thumbnail rounded-circle end-0"
@@ -170,13 +179,18 @@ function mapStateToProps ({authedUser, users, questions}, props) {
         answered = (answered === qid ? true : false)
     }
 
+    // Find answer
+    const yourAnswer = users[authedUser[0]].answers[qid]
+    console.log("Your Answer:", users[authedUser[0]].answers[qid])
+
     // If already answered; show with results instead
     if (results === undefined) {results = answered}
     let totalOne, totalTwo = 0;
 
     if (results) {
-        totalOne = Math.floor((question.optionOne.votes.length / userIds.length) * 100)
-        totalTwo = Math.floor((question.optionTwo.votes.length / userIds.length) * 100)
+        const totalVotes = question.optionOne.votes.length + question.optionTwo.votes.length
+        totalOne = Math.floor((question.optionOne.votes.length / totalVotes) * 100)
+        totalTwo = Math.floor((question.optionTwo.votes.length / totalVotes) * 100)
     }
 
     // Default to view only if not defined and not answered
@@ -199,7 +213,8 @@ function mapStateToProps ({authedUser, users, questions}, props) {
         question,
         toAnswer,
         users,
+        yourAnswer,
     }
 }
 
-export default withRouter(connect(mapStateToProps)(Question))
+export default withRouter(connect(mapStateToProps)(Questions))

@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from "react-redux";
-import Question from "./Question";
+import Question from "./Questions";
 
 class Dashboard extends Component {
     render() {
@@ -24,7 +24,7 @@ class Dashboard extends Component {
                              data-bs-parent="#accordionExample">
                             <div className="accordion-body">
                             {unansweredQuestionsIds.map((id) => (
-                                <Question qid={id} answered={false} toAnswer={false} />
+                                <Question key={id} qid={id} answered={false} toAnswer={false} />
                             ))}
                             </div>
                         </div>
@@ -41,7 +41,7 @@ class Dashboard extends Component {
                              aria-labelledby="headingTwo" data-bs-parent="#accordionExample">
                             <div className="accordion-body">
                             {answeredQuestionsIds.map((id) => (
-                                <Question qid={id} answered={true} toAnswer={false} />
+                                <Question key={id} qid={id} answered={true} toAnswer={false} />
                             ))}
                             </div>
                         </div>
@@ -58,9 +58,11 @@ function mapStateToProps ({questions, users, authedUser}) {
     return {
         questionIds: Object.keys(questions)
             .sort((a,b) => questions[b].timestamp - questions[a].timestamp),
-        answeredQuestionsIds: Object.keys(users[authUser].answers), //users[authUser].answers,
+        answeredQuestionsIds: Object.keys(users[authUser].answers)
+            .sort((a,b) => questions[b].timestamp - questions[a].timestamp), //users[authUser].answers,
         unansweredQuestionsIds: Object.keys(questions)
-            .filter((id) => !Object.keys(users[authUser].answers).includes(id)),
+            .filter((id) => !Object.keys(users[authUser].answers).includes(id))
+            .sort((a,b) => questions[b].timestamp - questions[a].timestamp),
         authedUser: authUser,
     }
 }
