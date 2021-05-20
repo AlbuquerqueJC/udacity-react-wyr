@@ -9,7 +9,8 @@ class LeaderboardView extends Component {
             <tr className={authedUser === userId ? "table-primary mb-3" : 'mb-3'}>
                 <th scope="row">{rank}</th>
                 <td>
-                    <img width="100px" src={users[userId].avatarURL} className="img-thumbnail rounded-circle" alt="Avatar Image" />
+                    <img width="100px" src={users[userId].avatarURL} className="img-thumbnail rounded-circle"
+                         alt="User Avatar" />
                 </td>
                 <td>{users[userId].name}</td>
                 <td>{asked}</td>

@@ -48,15 +48,12 @@ function mapStateToProps ({users}) {
         let score = asked + answered
         return {id, score, asked, answered,}
     })
-    console.log(userTotals)
     userTotals.sort((a, b)=> b.score - a.score)
     let i = 0
     userTotalsRanked = userTotals.map((u) => {
         i++
         return {...u, rank: i}
     })
-    console.log(userTotalsRanked)
-
     return {
         userIds: userIds,
         userTotalsRanked,

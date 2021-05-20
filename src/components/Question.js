@@ -157,14 +157,10 @@ class Question extends Component {
 function mapStateToProps ({authedUser, users, questions}, props) {
     let { qid } = props.match.params
     const toAnswer = !(props.match.params.qid === undefined)
-    console.log("toAnswer:", toAnswer)
     if (qid === undefined) { qid = props.qid }
     let {view, results, answered} = props
-    console.log("qid", qid)
     const question = questions[qid]
-    console.log(question)
     const userIds = Object.keys(users)
-    console.log(users[authedUser[0]].answers, qid)
 
     // Find out if question is already answered by user; if user came directly here.
     if (answered === undefined) {
@@ -173,7 +169,6 @@ function mapStateToProps ({authedUser, users, questions}, props) {
         })
         answered = (answered === qid ? true : false)
     }
-    console.log(answered)
 
     // If already answered; show with results instead
     if (results === undefined) {results = answered}
